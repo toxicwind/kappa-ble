@@ -1,11 +1,11 @@
-# AGENTS.md — kilo-ble (subproject of ranch/kilo)
+# AGENTS.md — kappa-ble (subproject of ranch/kappa)
 
-> Refines: `ranch/kilo/AGENTS.md` (master). Owns nothing above it; this file
+> Refines: `ranch/kappa/AGENTS.md` (master). Owns nothing above it; this file
 > refines the master's rules for the Kilo × ble.sh integration only.
 
 ## Owns
 
-`contrib/kilo.bash` (loader) + `contrib/kilo/tooling.bash` (env fix, prompt
+`contrib/kappa.bash` (loader) + `contrib/kappa/tooling.bash` (env fix, prompt
 unit, keybinding). Make Kilo a first-class citizen in ble.sh (bash line editor).
 
 ## Non-negotiables
@@ -24,6 +24,6 @@ unit, keybinding). Make Kilo a first-class citizen in ble.sh (bash line editor).
 
 ## Verify before done
 
-`bash -n contrib/kilo.bash contrib/kilo/tooling.bash` (syntax), and in a real
-shell after sourcing: `bleopt prompt_rps1='\q{contrib/kilo-info}'` renders
-`kilo:*` and C-x k is bound (`ble-bind --help | rg kilo`).
+`bash -n contrib/kappa.bash contrib/kappa/tooling.bash` (syntax), and in a real
+shell after sourcing: `bleopt prompt_rps1='\q{contrib/kappa-info}'` renders
+`kappa:*` and C-x k is bound (`ble-bind --help | rg kappa`).
