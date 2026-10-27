@@ -1,30 +1,27 @@
-# kappa-ble — first-class Kilo × ble.sh integration
+<div align="center">
 
-Subproject of the `ranch/kappa` monorepo. Makes Kilo a first-class citizen in
-**ble.sh** (the Bash line editor that renders the prompt on this box).
+# kappa-ble
 
-## Goal
+[![Shell](https://img.shields.io/badge/shell-bash-black?style=for-the-badge)](https://www.gnu.org/software/bash/)
+[![ble.sh](https://img.shields.io/badge/line--editor-ble.sh-4cc2ff?style=for-the-badge)](https://github.com/akinomyoga/ble.sh)
 
-ble.sh currently drops a `ble.sh: insane environment: $USER is empty` warning
-in tmux-spawned panes and has no awareness of Kilo. This subproject fixes that
-and wires Kilo into the line editor:
+**First-class [kappa](https://github.com/toxicwind/kappa) × ble.sh integration**
 
-1. **env-sanity** — ensure `USER`/`HOME` so ble.sh's prompt build never complains
-   (the warning you saw when panes sourced ble).
-2. **Kilo prompt unit** — `bleopt prompt_rps1='\q{contrib/kappa-info}'` shows the
-   active agent@model (`kappa:code@glm-5.3-flash`) in the prompt.
-3. **`Ctrl-x k`** — opens Kilo in `$PWD` from the line editor (smcup/rmcup,
-   then ble resumes).
+</div>
 
-## Layout
+Makes the [kappa](https://github.com/toxicwind/kappa-code) CLI a first-class
+citizen in [ble.sh](https://github.com/akinomyoga/ble.sh) — the Bash line
+editor — fixing its tmux-pane env warning and wiring the agent into the prompt.
 
-```
-contrib/kappa.bash              # loader — borrowed Bash-it blesh.plugin.bash pattern
-contrib/kappa/tooling.bash      # env fix + prompt unit + keybinding
-docs/                          # dd detail for the units
-```
+## What you get
 
-## Using
+- **env-sanity** — `USER`/`HOME` guaranteed so ble.sh never prints
+  `insane environment: $USER is empty` in tmux-spawned panes
+- **kappa prompt unit** — `bleopt prompt_rps1='\q{contrib/kappa-info}'` shows
+  the active agent@model (`kappa:code@glm-5.3-flash`) in the prompt
+- **`Ctrl-x k`** — open kappa in `$PWD` from the line editor (smcup/rmcup, then ble resumes)
+
+## Install
 
 Add to `~/.bashrc` after ble.sh is available:
 
@@ -33,17 +30,24 @@ bleopt prompt_rps1='\q{contrib/kappa-info}'
 # Ctrl-x k already bound by the contrib
 ```
 
+## Layout
+
+```
+contrib/kappa.bash              # loader — Bash-it blesh.plugin.bash pattern
+contrib/kappa/tooling.bash      # env fix + prompt unit + keybinding
+docs/                          # per-unit detail
+```
+
 ## Pattern provenance
 
-Loader pattern borrowed from `Bash-it/bash-it` → `blesh.plugin.bash` (found via
-`forge borrow ...`): double-load guard on `BLE_VERSION`, `source ble.sh
---attach=prompt`, conditional `ble-import`. Units follow ble.sh's own
-`prompt-git.bash` conventions (`ble-import contrib/prompt-defer`,
-`ble/prompt/unit/assign`, `ble/util/assign/cached`).
+Loader borrowed from `Bash-it/bash-it` → `blesh.plugin.bash`: double-load guard
+on `BLE_VERSION`, `source ble.sh --attach=prompt`, conditional `ble-import`.
+Units follow ble.sh's own `prompt-git.bash` conventions
+(`ble-import contrib/prompt-defer`, `ble/prompt/unit/assign`,
+`ble/util/assign/cached`).
 
 ## Rules
 
-- Additive only. Never source the loader twice.
-- Keep the env fix in one place (`tooling.bash`) so a future ble.sh upgrade
-  doesn't regress it.
-- No `head`/`tail`/`2>&1`-merging in *executable* shell glue (two-sec guard).
+- Additive only; never source the loader twice.
+- Env fix stays single-sourced in `tooling.bash` so a ble.sh upgrade can't regress it.
+- No stream-merging (`2>&1`) or output truncation (`| head`/`| tail`) in executable shell glue.
